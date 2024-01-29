@@ -136,7 +136,7 @@ function App() {
         // break;
 
       case 3:
-  
+  // 
         return <Box style={formStyle}>
                   <Typography >Challenges Preference</Typography>
                   <Typography>Please tell us which frontend challenges you would like to participated in</Typography>
