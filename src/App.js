@@ -150,7 +150,7 @@ function App() {
                   </Box>
                 </Box>     
         
-        // break;
+        break;
 
       case 4:
         return <Box style={reviewStyle} >
