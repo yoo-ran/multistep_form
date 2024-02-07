@@ -63,7 +63,7 @@ function App() {
     justifyContent:"center",
     alignItems: 'center',
     rowGap: '10vh',
-    width:"70%",
+    width:"80%",
     height:"70vh",
     minHeight:"60vh"
   }
