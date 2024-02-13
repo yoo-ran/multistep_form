@@ -5,6 +5,7 @@ import Box from '@mui/material/Box';
 import TextField from '@mui/material/TextField';
 import RadioGroup from '@mui/material/RadioGroup';
 import Radio from '@mui/material/Radio';
+import Alert from '@mui/material/Alert';
 // import FormControl from '@mui/material/FormControl';
 import FormControlLabel from '@mui/material/FormControlLabel';
 import Container from '@mui/material/Container';
@@ -26,24 +27,71 @@ const steps = ['Select campaign settings', 'Create an ad group', 'Create an ad',
 
 function App() {
   const [activeStep, setActiveStep] = useState(0);
-  const [name,setName] = useState("");
-  const [email,setEmail] = useState("");
-  const [phone,setPhone] = useState("");
-  const [user,setUser] = useState("");
+  const [info,setInfo]=useState({
+    name:"",
+    email:"",
+    phone:"",
+    user:""
+  });
   const [level, setLevel] = useState("");
   const [preference, setPreference] = useState("");
+  const [goNext, setGoNext] = useState(false);
+  const [alert, setAlert] = useState(false)
+
+            
+  const alertText = alert ? <Alert severity="error">This is an error Alert.</Alert>:""
 
   const handleNext = () => {
-    setActiveStep((prevActiveStep) => prevActiveStep + 1);
+
+    switch (activeStep) {
+      case 0:
+          for (const [key, value] of Object.entries(info)) {
+            if(value==""){
+                setGoNext(false)
+            }else{
+              setGoNext(true)
+            }
+          }
+          if(goNext){
+            setActiveStep((activeStep) => activeStep + 1);
+            setAlert(false)
+          }else{
+            setAlert(true);
+          }
+        break;
+
+      case 1:
+        if (level!="" ) {
+          setActiveStep((activeStep) => activeStep + 1);
+          setAlert(false);
+          }else{
+            setAlert(true);
+          }
+        break;
+
+      case 2:
+        if (preference!="") {
+          setActiveStep((activeStep) => activeStep + 1);
+          setAlert(false);
+          }else{
+            setAlert(true);
+          }
+        break;
+    
+      default:
+        setAlert(false);
+        setGoNext(false)
+        break;
+    }
+    
+
+
   };
 
   const handleBack = () => {
-    setActiveStep((prevActiveStep) => prevActiveStep - 1);
+    setActiveStep((activeStep) => activeStep - 1);
   };
 
-  const handleReset = () => {
-    setActiveStep(0);
-  };
 
 
   const containerStyle = {
@@ -100,8 +148,7 @@ function App() {
   }
   
 
-  const stepContent = (step) => {
-
+  const stepContent = (step) => {     
 
     switch (step) {
       case 1:
@@ -109,12 +156,14 @@ function App() {
             <Typography >Personal Information</Typography>
             <Typography>Please provide your personal details so we can get to know you better</Typography>
             <Box style={inputStyle}>
-              <TextField style={inputWidth} label="Full Name" variant="standard" onChange={(event)=>{setName(event.target.value)}}/>          
-              <TextField style={inputWidth} label="Email Address" variant="standard" onChange={(event)=>{setEmail(event.target.value)}} />          
-              <TextField style={inputWidth} label="Phone Number" variant="standard" onChange={(event)=>{setPhone(event.target.value)}} />          
-              <TextField style={inputWidth} label="Username" variant="standard" onChange={(event)=>{setUser(event.target.value)}} />          
+              <TextField style={inputWidth} required label="Full Name" value={info.name} variant="standard" onChange={(event)=>{setInfo({...info, name:event.target.value});console.log(event);}} />          
+              <TextField style={inputWidth} required label="Email Address" value={info.email} variant="standard" onChange={(event)=>{setInfo({...info, email:event.target.value})}} />          
+              <TextField style={inputWidth} required label="Phone Number" value={info.phone} variant="standard" onChange={(event)=>{setInfo({...info, phone:event.target.value})}} />          
+              <TextField style={inputWidth} required label="Username" value={info.user} variant="standard" onChange={(event)=>{setInfo({...info, user:event.target.value})}} />          
             </Box>
         </Box>     
+
+
         // break;
 
       case 2:
@@ -124,7 +173,7 @@ function App() {
                     <Typography>Please tell us about your skill level in frontend development</Typography>
                   </Box>
                   <Box>
-                      <RadioGroup style={inputStyle} row  aria-labelledby="demo-row-radio-buttons-group-label" name="row-radio-buttons-group" onChange={(event)=>{setLevel(event.target.value)}} >
+                      <RadioGroup style={inputStyle} row  aria-labelledby="demo-row-radio-buttons-group-label" name="row-radio-buttons-group" value={level} onChange={(event)=>{setLevel(event.target.value)}} >
                         <FormControlLabel style={inputWidth} value="beginner" control={<Radio />} label="Beginner" />
                         <FormControlLabel style={inputWidth} value="intermediate" control={<Radio />} label="Intermediate" />
                         <FormControlLabel style={inputWidth} value="advanced" control={<Radio />} label="Advanced" />
@@ -136,12 +185,11 @@ function App() {
         // break;
 
       case 3:
-// case 3
         return <Box style={formStyle}>
                   <Typography >Challenges Preference</Typography>
                   <Typography>Please tell us which frontend challenges you would like to participated in</Typography>
                   <Box>
-                    <RadioGroup style={inputStyle} row  aria-labelledby="demo-row-radio-buttons-group-label" name="row-radio-buttons-group" onChange={(event)=>{setPreference(event.target.value)}} >
+                    <RadioGroup style={inputStyle} row  aria-labelledby="demo-row-radio-buttons-group-label" name="row-radio-buttons-group" value={preference} onChange={(event)=>{setPreference(event.target.value)}} >
                       <FormControlLabel style={inputWidth} value="html/css/js" control={<Radio />} label="HTML/CSS/JS" />
                       <FormControlLabel style={inputWidth} value="react" control={<Radio />} label="React.js" />
                       <FormControlLabel style={inputWidth} value="vue" control={<Radio />} label="Vue.js" />
@@ -150,25 +198,25 @@ function App() {
                   </Box>
                 </Box>     
         
-        break;
+        // break;
 
       case 4:
         return <Box style={reviewStyle} >
                   <Box style={reviewBox}>
                     <Typography>Full Name</Typography>
-                    <Typography>{name}</Typography>
+                    <Typography>{info.name}</Typography>
                   </Box>
                   <Box style={reviewBox}>
                     <Typography>Email Address</Typography>
-                    <Typography>{email}</Typography>
+                    <Typography>{info.email}</Typography>
                   </Box>
                   <Box style={reviewBox}>
                     <Typography>Phone</Typography>
-                    <Typography>{phone}</Typography>
+                    <Typography>{info.phone}</Typography>
                   </Box>
                   <Box style={reviewBox}>
                     <Typography>Username</Typography>
-                    <Typography>{user}</Typography>
+                    <Typography>{info.user}</Typography>
                   </Box>
                   <Box style={reviewBox}>
                     <Typography>Level</Typography>
@@ -179,7 +227,7 @@ function App() {
                     <Typography>{preference}</Typography>
                   </Box>
               </Box>
-        
+    
         // break;
     
       default:
@@ -213,18 +261,16 @@ function App() {
             <Typography sx={{ mt: 2, mb: 1 }}>
               All steps completed - you&apos;re finished
             </Typography>
-            <Box sx={{ display: 'flex', flexDirection: 'row', pt: 2 }}>
-              <Box sx={{ flex: '1 1 auto' }} />
-              <Button onClick={handleReset}>Reset</Button>
-            </Box>
           </React.Fragment>
         ) : (
 
           <React.Fragment>
             <CssBaseline />
-            <Box >
+            {alertText}
+            <Box id="contents" >
               {stepContent(activeStep+1)}
             </Box>
+
             <Box sx={{ display: 'flex', flexDirection: 'row', pt: 2 }}>
               <Button
                 color="inherit"
