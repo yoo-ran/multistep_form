@@ -1,21 +1,14 @@
 import './App.css';
 import * as React from 'react';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import Box from '@mui/material/Box';
 import TextField from '@mui/material/TextField';
 import RadioGroup from '@mui/material/RadioGroup';
 import Radio from '@mui/material/Radio';
 import Alert from '@mui/material/Alert';
-// import FormControl from '@mui/material/FormControl';
 import FormControlLabel from '@mui/material/FormControlLabel';
 import Container from '@mui/material/Container';
-
-import CssBaseline from '@mui/material/CssBaseline';
-// import {makeStyles } from '@mui/styles';
-// import { createTheme, ThemeProvider } from '@mui/material/styles';
-// import { lime, purple } from '@mui/material/colors';
-
-
+import { orange } from '@mui/material/colors';
 
 import Stepper from '@mui/material/Stepper';
 import Step from '@mui/material/Step';
@@ -23,76 +16,7 @@ import StepLabel from '@mui/material/StepLabel';
 import Button from '@mui/material/Button';
 import Typography from '@mui/material/Typography';
 
-const steps = ['Select campaign settings', 'Create an ad group', 'Create an ad',"Review"];
-
-function App() {
-  const [activeStep, setActiveStep] = useState(0);
-  const [info,setInfo]=useState({
-    name:"",
-    email:"",
-    phone:"",
-    user:""
-  });
-  const [level, setLevel] = useState("");
-  const [preference, setPreference] = useState("");
-  const [goNext, setGoNext] = useState(false);
-  const [alert, setAlert] = useState(false)
-
-            
-  const alertText = alert ? <Alert severity="error">This is an error Alert.</Alert>:""
-
-  const handleNext = () => {
-
-    switch (activeStep) {
-      case 0:
-          for (const [key, value] of Object.entries(info)) {
-            if(value==""){
-                setGoNext(false)
-            }else{
-              setGoNext(true)
-            }
-          }
-          if(goNext){
-            setActiveStep((activeStep) => activeStep + 1);
-            setAlert(false)
-          }else{
-            setAlert(true);
-          }
-        break;
-
-      case 1:
-        if (level!="" ) {
-          setActiveStep((activeStep) => activeStep + 1);
-          setAlert(false);
-          }else{
-            setAlert(true);
-          }
-        break;
-
-      case 2:
-        if (preference!="") {
-          setActiveStep((activeStep) => activeStep + 1);
-          setAlert(false);
-          }else{
-            setAlert(true);
-          }
-        break;
-    
-      default:
-        setAlert(false);
-        setGoNext(false)
-        break;
-    }
-    
-
-
-  };
-
-  const handleBack = () => {
-    setActiveStep((activeStep) => activeStep - 1);
-  };
-
-
+const steps = ['Personal Information', 'Level', 'Review',"Review"];
 
   const containerStyle = {
     display:"flex",
@@ -101,7 +25,7 @@ function App() {
     alignItems: 'center',
     height:"100vh",
     width:"100vw",
-    backgroundColor:"whitesmoke",
+    backgroundColor:"whitesmoke"
   };
 
   const boxStyle = {
@@ -113,7 +37,10 @@ function App() {
     rowGap: '10vh',
     width:"80%",
     height:"70vh",
-    minHeight:"60vh"
+    minHeight:"60vh",
+    backgroundColor:orange[50],
+    borderRadius: "5vh",
+    padding: "5vh 0"
   }
 
   const formStyle = {
@@ -122,6 +49,12 @@ function App() {
     height:"20vh"
     // other styles
   };
+
+  const title = {
+    fontWeight:"bold",
+    fontSize:"26px"
+  }
+
   const inputStyle = {
     display:"flex",
     flexWrap:"wrap",
@@ -146,14 +79,134 @@ function App() {
     border:"1px solid red",
     width:"30%"
   }
+
+  const alertStyle =  {
+    position:"absolute",
+    top: "40%",
+    left:"35%",
+    width:"30vw"
+  }
+
+
+function App() {
+  const [activeStep, setActiveStep] = useState(1);
+  const [info,setInfo]=useState({
+    name:"",
+    email:"",
+    phone:"",
+    user:""
+  });
+  const [level, setLevel] = useState("");
+  const [preference, setPreference] = useState("");
+  const [goNext, setGoNext] = useState(false);
+  const [alert, setAlert] = useState(false)
+  let alertText = "";
+  // const alertText = <Alert severity="error" style={alertStyle}>This is an error Alert.</Alert>;
+
+
+  const handleNext = () => { 
+
+    switch (activeStep) {
+
+      case 1:
+        for (const [key, value] of Object.entries(info)) {
+          if(value===""){
+            setGoNext(false);
+            setAlert(true);
+          } else {
+            setGoNext(true);
+            setAlert(false);
+          }
+        }
+      case 2:
+        if(level !== ""){ 
+          setActiveStep((activeStep) => activeStep + 1);
+        }
+
+      case 3:
+        if (preference!=="") {
+          setActiveStep((activeStep) => activeStep + 1);
+          setAlert(false);
+          }else{
+            setAlert(true);
+          }
+        break;
+    
+      default:
+        setAlert(false);
+        break;
+
+    } 
+
+
+  }
+
+  useEffect(() => {
+
+    console.log('hi');
+      switch (activeStep) {
+        case 1:
+            if(goNext){
+              setActiveStep((activeStep) => activeStep + 1);
+              setAlert(false);
+            }
+          break;
+      }
+    
   
+  }, [goNext]);
+
+  useEffect(() => {
+    // if(goNext){
+      switch (activeStep) {
+        case 3:
+          if (level!=="") {
+            setAlert(false);
+          }
+        break;
+      }
+    // }
+    
+  
+  }, [level]);  
+
+  useEffect(() => {
+    // if(goNext){
+
+    console.log('effect:' + alert);
+      
+      if (alert) {
+        alertText = <Alert severity="error" style={alertStyle}>This is an error Alert.</Alert>
+      } else {
+        alertText = "";
+      }
+    // }
+    
+  
+  }, [alert]);  
+
+  const handleBack = () => {
+    setActiveStep((activeStep) => activeStep - 1);
+  };
+
+  const alertContent = (a) => {
+
+    if (a) {
+      alertText =  <Alert severity="error" style={alertStyle}>This is an error Alert.</Alert>;
+    } else {
+      alertText = "";
+    }
+
+    return alertText;
+  }
+
 
   const stepContent = (step) => {     
 
     switch (step) {
       case 1:
         return <Box style={formStyle}>
-            <Typography >Personal Information</Typography>
+            <Typography style={title}>Personal Information</Typography>
             <Typography>Please provide your personal details so we can get to know you better</Typography>
             <Box style={inputStyle}>
               <TextField style={inputWidth} required label="Full Name" value={info.name} variant="standard" onChange={(event)=>{setInfo({...info, name:event.target.value});console.log(event);}} />          
@@ -169,7 +222,7 @@ function App() {
       case 2:
         return <Box style={formStyle}>
                   <Box>
-                    <Typography>Skill Level</Typography>
+                    <Typography style={title}>Skill Level</Typography>
                     <Typography>Please tell us about your skill level in frontend development</Typography>
                   </Box>
                   <Box>
@@ -186,7 +239,7 @@ function App() {
 
       case 3:
         return <Box style={formStyle}>
-                  <Typography >Challenges Preference</Typography>
+                  <Typography style={title}>Challenges Preference</Typography>
                   <Typography>Please tell us which frontend challenges you would like to participated in</Typography>
                   <Box>
                     <RadioGroup style={inputStyle} row  aria-labelledby="demo-row-radio-buttons-group-label" name="row-radio-buttons-group" value={preference} onChange={(event)=>{setPreference(event.target.value)}} >
@@ -265,10 +318,9 @@ function App() {
         ) : (
 
           <React.Fragment>
-            <CssBaseline />
-            {alertText}
+            {alertContent(alert)}
             <Box id="contents" >
-              {stepContent(activeStep+1)}
+              {stepContent(activeStep)}
             </Box>
 
             <Box sx={{ display: 'flex', flexDirection: 'row', pt: 2 }}>
