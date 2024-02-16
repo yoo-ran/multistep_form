@@ -150,7 +150,7 @@ function App() {
               setActiveStep((activeStep) => activeStep + 1);
               setAlert(false);
             }
-          break;
+          // break;
       }
     
   
@@ -171,6 +171,7 @@ function App() {
   }, [level]);  
 
   useEffect(() => {
+    // if(goNext){
     // if(goNext){
 
     console.log('effect:' + alert);
