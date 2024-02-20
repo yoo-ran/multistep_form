@@ -1,5 +1,6 @@
 import * as React from 'react';
 import { useState, useEffect } from 'react';
+import { createTheme, ThemeProvider } from '@mui/material/styles';
 import Box from '@mui/material/Box';
 import TextField from '@mui/material/TextField';
 import RadioGroup from '@mui/material/RadioGroup';
@@ -19,6 +20,43 @@ import './App.css';
 
 const steps = ['Personal Information', 'Level', 'Preference',"Review"];
 
+const theme = createTheme({
+  typography: {
+    h4: {
+      fontSize:"1.8rem",
+      textAlign:"center",
+      color: "#4527a0",
+      fontWeight:"bold"
+    },
+    subtitle1: {
+      fontWeight: 500,
+      textAlign:"center",
+      fontSize:"1.1rem",
+      color: "#7e57c2"
+    },
+    button: {
+      border: "1px solid",
+      color: "#7e57c2"
+    },
+    h6:{
+      color:"gray",
+      fontSize:"0.8rem"
+    },
+    body2:{
+      fontSize:"1.1rem"
+    },
+    h3:{
+      textAlign:'center',
+      fontSize:"3rem",
+      fontWeight:"bold",
+      color:"#7e57c2"
+    },
+    body1:{
+      textAlign:'center',
+      fontSize:"1rem"
+    }
+  },
+});
 
 function App() {
   const [activeStep, setActiveStep] = useState(1);
@@ -34,12 +72,25 @@ function App() {
   const [alert, setAlert] = useState(false)
   let alertText = "";
 
+  const handleReset = () => {
+    setActiveStep(1);
+    setInfo({
+      name:"",
+      email:"",
+      phone:"",
+      user:""
+    });
+    setLevel("");
+    setPreference("");
+  };
+
   const handleNext = () => { 
 
     switch (activeStep) {
 
       case 1:
         for (const [key, value] of Object.entries(info)) {
+          console.log(value);
           if(value===""){
             setGoNext(false);
             setAlert(true);
@@ -49,9 +100,6 @@ function App() {
           }
         }
       case 2:
-        // if(level !== ""){ 
-        //   setActiveStep((activeStep) => activeStep + 1);
-        // }
         if (level!=="") {
           setActiveStep((activeStep) => activeStep + 1);
           setAlert(false);
@@ -78,6 +126,7 @@ function App() {
 
       default:
         setAlert(false);
+        setGoNext(false);
         break;
 
     } 
@@ -86,17 +135,14 @@ function App() {
   }
 
   useEffect(() => {
-
-    console.log('hi');
       switch (activeStep) {
         case 1:
+          console.log(goNext);
             if(goNext){
               setActiveStep((activeStep) => activeStep + 1);
               setAlert(false);
             }
       }
-    
-  
   }, [goNext]);
 
   useEffect(() => {
@@ -117,34 +163,29 @@ function App() {
           }
         break;
       }
-    
-  
   }, [preference]);  
 
-  useEffect(() => {
-
-    console.log('effect:' + alert);
-      
-      if (alert) {
-        alertText = <Alert severity="error" className='alertStyle'>This is an error Alert.</Alert>
-      } else {
-        alertText = "";
-      }
-    // }
-    
+  // useEffect(() => {
+  //     if (alert) {
+  //       alertText = <Alert severity="error" >You must fill out the form.</Alert>
+  //     } else {
+  //       alertText = "";
+  //     }
   
-  }, [alert]);  
+  // }, [alert]);  
 
   const handleBack = () => {
     setActiveStep((activeStep) => activeStep - 1);
   };
 
+
+
   const alertContent = (a) => {
 
     if (a) {
-      alertText =  <Alert severity="error" sclassName='alertStyle'>This is an error Alert.</Alert>;
+      alertText =  <Alert severity="error">You must fill out the form.</Alert>;
     } else {
-      alertText = "";
+      alertText = <Alert severity="error" className='hidden'>empty</Alert>;
     }
 
     return alertText;
@@ -156,8 +197,8 @@ function App() {
     switch (step) {
       case 1:
         return <Box className="formStyle">
-            <Typography className="title">Personal Information</Typography>
-            <Typography>Please provide your personal details so we can get to know you better</Typography>
+            <Typography variant='h5'>Personal Information</Typography>
+            <Typography variant='subtitle2'>Please provide your personal details so we can get to know you better</Typography>
             <Box className="inputStyle">
               <TextField className="inputWidth" required label="Full Name" value={info.name} variant="standard" onChange={(event)=>{setInfo({...info, name:event.target.value});console.log(event);}} />          
               <TextField className="inputWidth" required label="Email Address" value={info.email} variant="standard" onChange={(event)=>{setInfo({...info, email:event.target.value})}} />          
@@ -172,15 +213,15 @@ function App() {
       case 2:
         return <Box className="formStyle">
                   <Box>
-                    <Typography className="title">Skill Level</Typography>
-                    <Typography>Please tell us about your skill level in frontend development</Typography>
+                    <Typography variant='h5'>Skill Level</Typography>
+                    <Typography variant='subtitle2'>Please tell us about your skill level in frontend development</Typography>
                   </Box>
                   <Box>
                       <RadioGroup className="inputStyle" row  aria-labelledby="demo-row-radio-buttons-group-label" name="row-radio-buttons-group" value={level} onChange={(event)=>{setLevel(event.target.value)}} >
-                        <FormControlLabel className="inputWidth" value="beginner" control={<Radio />} label="Beginner" />
-                        <FormControlLabel className="inputWidth" value="intermediate" control={<Radio />} label="Intermediate" />
-                        <FormControlLabel className="inputWidth" value="advanced" control={<Radio />} label="Advanced" />
-                        <FormControlLabel className="inputWidth" value="other" control={<Radio />} label="Other" />
+                        <FormControlLabel className="inputWidth" value="Beginner" control={<Radio />} label="Beginner" />
+                        <FormControlLabel className="inputWidth" value="Intermediate" control={<Radio />} label="Intermediate" />
+                        <FormControlLabel className="inputWidth" value="Advanced" control={<Radio />} label="Advanced" />
+                        <FormControlLabel className="inputWidth" value="Other" control={<Radio />} label="Other" />
                       </RadioGroup>  
                   </Box>
                </Box>     
@@ -189,14 +230,14 @@ function App() {
 
       case 3:
         return <Box className="formStyle">
-                  <Typography className="title">Challenges Preference</Typography>
-                  <Typography>Please tell us which frontend challenges you would like to participated in</Typography>
+                  <Typography variant='h5'>Challenges Preference</Typography>
+                  <Typography variant='subtitle2'>Please tell us which frontend challenges you would like to participated in</Typography>
                   <Box>
                     <RadioGroup className="inputStyle" row  aria-labelledby="demo-row-radio-buttons-group-label" name="row-radio-buttons-group" value={preference} onChange={(event)=>{setPreference(event.target.value)}} >
-                      <FormControlLabel className="inputWidth" value="html/css/js" control={<Radio />} label="HTML/CSS/JS" />
-                      <FormControlLabel className="inputWidth" value="react" control={<Radio />} label="React.js" />
-                      <FormControlLabel className="inputWidth" value="vue" control={<Radio />} label="Vue.js" />
-                      <FormControlLabel className="inputWidth" value="other" control={<Radio />} label="Other" />
+                      <FormControlLabel className="inputWidth" value="HTML/CSS/JS" control={<Radio />} label="HTML/CSS/JS" />
+                      <FormControlLabel className="inputWidth" value="React.js" control={<Radio />} label="React.js" />
+                      <FormControlLabel className="inputWidth" value="Vue.js" control={<Radio />} label="Vue.js" />
+                      <FormControlLabel className="inputWidth" value="Other" control={<Radio />} label="Other" />
                     </RadioGroup>      
                   </Box>
                 </Box>     
@@ -206,28 +247,28 @@ function App() {
       case 4:
         return <Box className="reviewStyle" >
                   <Box className="reviewBox">
-                    <Typography>Full Name</Typography>
-                    <Typography>{info.name}</Typography>
+                    <Typography variant='h6'>Full Name</Typography>
+                    <Typography variant='body2'>{info.name}</Typography>
                   </Box>
                   <Box className="reviewBox">
-                    <Typography>Email Address</Typography>
-                    <Typography>{info.email}</Typography>
+                    <Typography variant='h6'>Email Address</Typography>
+                    <Typography variant='body2'>{info.email}</Typography>
                   </Box>
                   <Box className="reviewBox">
-                    <Typography>Phone</Typography>
-                    <Typography>{info.phone}</Typography>
+                    <Typography variant='h6'>Phone</Typography>
+                    <Typography variant='body2'>{info.phone}</Typography>
                   </Box>
                   <Box className="reviewBox">
-                    <Typography>Username</Typography>
-                    <Typography>{info.user}</Typography>
+                    <Typography variant='h6'>Username</Typography>
+                    <Typography variant='body2'>{info.user}</Typography>
                   </Box>
                   <Box className="reviewBox">
-                    <Typography>Level</Typography>
-                    <Typography>{level}</Typography>
+                    <Typography variant='h6'>Level</Typography>
+                    <Typography variant='body2'>{level}</Typography>
                   </Box>
                   <Box className="reviewBox">
-                    <Typography>Preference</Typography>
-                    <Typography>{preference}</Typography>
+                    <Typography variant='h6'>Preference</Typography>
+                    <Typography variant='body2'>{preference}</Typography>
                   </Box>
               </Box>
     
@@ -239,59 +280,69 @@ function App() {
   }
 
   return (
-    <Container className="containerStyle">
+    
+    <Container id="containerStyle">
 
       <Box className="boxStyle" spacing={8}>
-      
         
         {activeStep === steps.length + 1 ? (
           // Compeleted
           <React.Fragment>
-            <Typography variant="h3">Thank You!</Typography>
-            <Typography variant="body1">Your form has been submitted. You're now a member of developer community.<br/>We will email you on <a href="mailto:frontend@mail.com">frontend@mail.com</a> in order to confirm your account.</Typography>
-            <Button>Go Back Home</Button>            
+            <ThemeProvider theme={theme}>
+              <Typography variant="h3">Thank You!</Typography>
+              <Typography variant="body1">Your form has been submitted. You're now a member of developer community.<br/>We will email you on <a href="mailto:frontend@mail.com">frontend@mail.com</a> in order to confirm your account.</Typography>
+              <Button onClick={handleReset} variant='button'>Go Back Home</Button>      
+            </ThemeProvider>      
           </React.Fragment>
         ) : (
 
 
           <React.Fragment>
+                <ThemeProvider theme={theme}>
+
               <Box>
-                <Typography>Join Our Community Developer</Typography>
-                <Typography>To join our community and participate challenges, Please fill out the following </Typography>
+                <Typography variant='h4'>Join Our Community Developer</Typography>
+                <Typography variant='subtitle1'>To join our community and participate challenges, Please fill out the following form. </Typography>
               </Box>
-              <Stepper activeStep={activeStep-1}>
+
+              <Stepper activeStep={activeStep-1} className='stepper'>
                 {steps.map((label, index) => {
                   const stepProps = {};
                   const labelProps = {};
               
                   return (
                     <Step key={label} {...stepProps}>
-                      <StepLabel {...labelProps}>{label}</StepLabel>
+                      <StepLabel  {...labelProps}>{label}</StepLabel>
                     </Step>
                   );
                 })}
               </Stepper>
 
-              {alertContent(alert)}
-
-              <Box id="contents" >
+              
+              
+              <Box>
                 {stepContent(activeStep)}
+
+                {alertContent(alert)}
+                  <Box sx={{ display: 'flex', flexDirection: 'row', justifyContent:"right", pt:2 }}>
+                    <Button
+                      id="btn"
+                      color="inherit"
+                      disabled={activeStep === 1}
+                      onClick={handleBack}
+                      sx={{ mr: 1 }}
+                    >
+                      Back
+                    </Button>
+                    <Button onClick={handleNext} id='btn' variant='btn'>
+                      {activeStep === steps.length - 1 ? 'Finish' : 'Next'}
+                    </Button>
+                </Box>
               </Box>
 
-              <Box sx={{ display: 'flex', flexDirection: 'row', pt: 2 }}>
-                <Button
-                  color="inherit"
-                  disabled={activeStep === 0}
-                  onClick={handleBack}
-                  sx={{ mr: 1 }}
-                >
-                  Back
-                </Button>
-                <Box sx={{ flex: '1 1 auto' }} />
-                <Button onClick={handleNext}>
-                  {activeStep === steps.length - 1 ? 'Finish' : 'Next'}
-                </Button>
-              </Box>
+              
+              </ThemeProvider>
+
           </React.Fragment>
         )}
       </Box>

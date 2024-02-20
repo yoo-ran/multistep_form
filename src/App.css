@@ -6,31 +6,75 @@ body{
 #root{
     width:100vw;
     height:100vh;
-    background-color:whitesmoke;
+    background-color:#9fa8da;
+
     display:flex;
     align-items:center;
+    padding:0 1rem;
+
 }
 
-.containerStyle {
-    border:1px solid red;
-    padding: 2rem 0;
-    /* background-color:orange; */
+#containerStyle {
+    background-color:#e8eaf6;
+    padding: 3rem 0;
+    border-radius:2rem;
+    width: 90%;
 }
 
 .boxStyle  {
     display:flex;
     flex-direction:column;
-    align-items:center;
-    row-gap:3rem;
+    justify-content:center;
+    align-items: center;
+    row-gap:5rem;
+    margin:0 auto;
+    height:40rem;
 }
+
+
+
 
 .formStyle  {
-  
+    margin-bottom:2rem;
+    display:flex;
+    flex-direction:column;
+    row-gap:0.5rem;
+    width: 20rem;
 }
 
-.title  {
-   /* font-weight:bolder; */
+.css-s9w95j-MuiStepLabel-label{
+    /* width:70%; */
+    font-size: 0.8rem !important;
 }
+
+.css-1u4zpwo-MuiSvgIcon-root-MuiStepIcon-root.Mui-active{
+    color: #7e57c2 !important;
+}
+
+.css-1u4zpwo-MuiSvgIcon-root-MuiStepIcon-root.Mui-completed{
+    color: #7e57c2 !important;
+}
+
+.css-vqmohf-MuiButtonBase-root-MuiRadio-root.Mui-checked{
+    color: #7e57c2 !important;
+}
+
+.css-18wijd0-MuiFormLabel-root-MuiInputLabel-root.Mui-focused{
+    color: #7e57c2 !important;
+}
+
+.css-163sl54-MuiInputBase-root-MuiInput-root::after{
+    border-bottom: 2px solid #7e57c2 !important;
+}
+
+.hidden{
+    opacity: 0;
+}
+
+#contents{
+    position: relative;
+}
+
 
 .inputStyle  {
     display:flex;
@@ -38,20 +82,39 @@ body{
     justify-content:center;
     column-gap:1rem;
     row-gap:1rem;
-};
+}
 
 .inputWidth{
-
+    width: 45%;
 }
 
 .reviewStyle  {
-   
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    grid-gap: 1.2rem;
+    place-items: center;
+    width: 40rem;
 }
 
-.reviewBox {
 
+.title{
+    color: gray;
 }
 
-.alertStyle   {
 
+@media (min-width: 961px) {
+    /* :root {
+        --rem: 36;
+    } */
+    html{
+        font-size: 18px;
+    }
+
+    .formStyle{
+        width: 40rem;
+    }
+
+    .stepper{
+        width:70%
+    }
 }
