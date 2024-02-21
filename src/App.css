@@ -16,22 +16,22 @@ body{
 
 #containerStyle {
     background-color:#e8eaf6;
-    padding: 3rem 0;
     border-radius:2rem;
     width: 90%;
+    height:70vh;
+    padding:0 1rem;
+    box-sizing: content-box;
+    display:flex;
+    align-items:center;
+    justify-content:center;
 }
 
 .boxStyle  {
     display:flex;
     flex-direction:column;
-    justify-content:center;
     align-items: center;
-    row-gap:5rem;
-    margin:0 auto;
-    height:40rem;
+    row-gap:3rem;
 }
-
-
 
 
 .formStyle  {
@@ -65,6 +65,10 @@ body{
 
 .css-163sl54-MuiInputBase-root-MuiInput-root::after{
     border-bottom: 2px solid #7e57c2 !important;
+}
+
+.MuiAlert-standardError{
+    font-size: 0.8rem !important;
 }
 
 .hidden{
@@ -101,20 +105,25 @@ body{
     color: gray;
 }
 
+.my-class{
+    color:red;
+}
 
 @media (min-width: 961px) {
-    /* :root {
-        --rem: 36;
-    } */
     html{
         font-size: 18px;
     }
 
+    #containerStyle{
+        width:50%;
+        padding:2rem;
+    }
+
     .formStyle{
-        width: 40rem;
+        width: 30rem;
     }
 
     .stepper{
-        width:70%
+        width:100%
     }
 }

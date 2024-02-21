@@ -23,7 +23,7 @@ const steps = ['Personal Information', 'Level', 'Preference',"Review"];
 const theme = createTheme({
   typography: {
     h4: {
-      fontSize:"1.8rem",
+      fontSize:"1.4rem",
       textAlign:"center",
       color: "#4527a0",
       fontWeight:"bold"
@@ -31,8 +31,11 @@ const theme = createTheme({
     subtitle1: {
       fontWeight: 500,
       textAlign:"center",
-      fontSize:"1.1rem",
+      fontSize:"0.8rem",
       color: "#7e57c2"
+    },
+    subtitle2: {
+      fontSize:"0.8rem",
     },
     button: {
       border: "1px solid",
@@ -40,7 +43,10 @@ const theme = createTheme({
     },
     h6:{
       color:"gray",
-      fontSize:"0.8rem"
+      fontSize:"1rem",
+    },
+    h5:{
+      fontSize:"1.2rem"
     },
     body2:{
       fontSize:"1.1rem"
@@ -54,6 +60,12 @@ const theme = createTheme({
     body1:{
       textAlign:'center',
       fontSize:"1rem"
+    },
+    outlined:{
+      fontSize:"0.8rem"
+    },
+    standard:{
+      fontSize:"0.5rem"
     }
   },
 });
@@ -191,6 +203,34 @@ function App() {
     return alertText;
   }
 
+  const regValidation = (type, value, target) => {
+    switch (type) {
+      case "email":
+        var emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
+        if (!emailRegex.test(value)) {
+          console.log("No");
+          console.log(target);
+          target.classList.add('my-class')
+          return false;
+        }else{
+          console.log("Yes");
+        }
+        break;
+      case "phone":
+         var phoneRegex = /^(\d{10}|\d{3}-\d{3}-\d{4}|\(\d{3}\)\s*\d{3}-\d{4})$/;
+        if (!phoneRegex.test(value)) {
+          console.log("No");
+          return false;
+        }else{
+          console.log("Yes");
+        }
+        break;
+    
+      default:
+        break;
+    }
+  }
+
 
   const stepContent = (step) => {     
 
@@ -200,9 +240,9 @@ function App() {
             <Typography variant='h5'>Personal Information</Typography>
             <Typography variant='subtitle2'>Please provide your personal details so we can get to know you better</Typography>
             <Box className="inputStyle">
-              <TextField className="inputWidth" required label="Full Name" value={info.name} variant="standard" onChange={(event)=>{setInfo({...info, name:event.target.value});console.log(event);}} />          
-              <TextField className="inputWidth" required label="Email Address" value={info.email} variant="standard" onChange={(event)=>{setInfo({...info, email:event.target.value})}} />          
-              <TextField className="inputWidth" required label="Phone Number" value={info.phone} variant="standard" onChange={(event)=>{setInfo({...info, phone:event.target.value})}} />          
+              <TextField className="inputWidth" required label="Full Name" value={info.name} variant="standard" onChange={(event)=>{setInfo({...info, name:event.target.value})}} />          
+              <TextField className="inputWidth" required label="Email Address" value={info.email} variant="standard" onChange={(event)=>{setInfo({...info, email:event.target.value}); regValidation("email",event.target.value, event.target);}}  />          
+              <TextField className="inputWidth" required label="Phone Number" value={info.phone} variant="standard" onChange={(event)=>{setInfo({...info, phone:event.target.value}); regValidation("phone",event.target.value)}} />          
               <TextField className="inputWidth" required label="Username" value={info.user} variant="standard" onChange={(event)=>{setInfo({...info, user:event.target.value})}} />          
             </Box>
         </Box>     
