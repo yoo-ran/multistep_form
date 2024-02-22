@@ -108,14 +108,38 @@ body{
 .my-class{
     color:red;
 }
-
-@media (min-width: 961px) {
+@media (min-width: 790px) and (max-width: 1279px) {
     html{
         font-size: 18px;
     }
 
     #containerStyle{
-        width:50%;
+        width:60%;
+        min-height: 60vh;
+        padding:2rem;
+    }
+
+    .formStyle{
+        width: 30rem;
+    }
+
+    .stepper{
+        width:100%
+    }
+
+}
+
+
+
+@media (min-width: 1280px) {
+    html{
+        font-size: 20px;
+    }
+
+    #containerStyle{
+        width:30%;
+        height: 50vh;
+        min-height: 60vh;
         padding:2rem;
     }
 

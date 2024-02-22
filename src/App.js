@@ -81,7 +81,8 @@ function App() {
   const [level, setLevel] = useState("");
   const [preference, setPreference] = useState("");
   const [goNext, setGoNext] = useState(false);
-  const [alert, setAlert] = useState(false)
+  const [alert, setAlert] = useState(false);
+  const [emailVali, setEmailVali] = useState(false)
   let alertText = "";
 
   const handleReset = () => {
@@ -96,21 +97,73 @@ function App() {
     setPreference("");
   };
 
+
+  const alertContent = (a) => {
+    if (a) {
+      console.log(emailVali);
+      if(emailVali){
+        alertText =  <Alert severity="error">Email or phone number is invalid</Alert>;
+      }else{
+        alertText =  <Alert severity="error">You must fill out the form.</Alert>;
+      }
+    } else {
+      alertText = <Alert severity="error" className='hidden'>empty</Alert>;
+    }
+    return alertText;
+  }
+
+  // const nullValid = (current) =>{
+  //   current
+  // }
+
   const handleNext = () => { 
 
     switch (activeStep) {
 
       case 1:
-        for (const [key, value] of Object.entries(info)) {
-          console.log(value);
-          if(value===""){
-            setGoNext(false);
-            setAlert(true);
-          } else {
+        var emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
+        var phoneRegex = /^(\d{10}|\d{3}-\d{3}-\d{4}|\(\d{3}\)\s*\d{3}-\d{4})$/;
+        console.log(info);
+        if( Object.values(info).every(val => val !== "")){
+          console.log(33);
+          if (emailRegex.test(info.email) && phoneRegex.test(info.phone) ) {
+            console.log("next");
             setGoNext(true);
             setAlert(false);
+            setEmailVali(false);
+          } else{
+            console.log("no");
+            setEmailVali(true);
+            setAlert(true);
           }
+        }else{
+          setGoNext(false);
+          setAlert(true);
+          setEmailVali(false);
         }
+       
+        // for (const [key, value] of Object.entries(info)) {
+        //   console.log(value);
+        //   if(value===""){
+        //     setGoNext(false);
+        //     setAlert(true);
+        //     setEmailVali(false);
+        //     console.log("sth empty");
+        //   }else{
+        //     console.log("?");
+        //     if (emailRegex.test(info.email) && phoneRegex.test(info.phone) ) {
+        //       console.log("next");
+        //       setGoNext(true);
+        //       setAlert(false);
+        //       setEmailVali(false);
+        //     } else{
+        //       console.log("no");
+        //       setEmailVali(true);
+        //       setAlert(true);
+        //     }
+        //   }
+        // }
+        
       case 2:
         if (level!=="") {
           setActiveStep((activeStep) => activeStep + 1);
@@ -130,11 +183,11 @@ function App() {
           }
         break;
 
-      case 4:
-        if (preference!=="") {
-          setActiveStep((activeStep) => activeStep + 1);
-          }else{
-          }
+      // case 4:
+      //   if (preference!=="") {
+      //     setActiveStep((activeStep) => activeStep + 1);
+      //     }else{
+      //     }
 
       default:
         setAlert(false);
@@ -143,13 +196,11 @@ function App() {
 
     } 
 
-
   }
 
   useEffect(() => {
       switch (activeStep) {
         case 1:
-          console.log(goNext);
             if(goNext){
               setActiveStep((activeStep) => activeStep + 1);
               setAlert(false);
@@ -165,7 +216,7 @@ function App() {
           }
         break;
       }
-  }, [level]);  
+  }, [level, activeStep]);  
 
   useEffect(() => {
       switch (activeStep) {
@@ -175,7 +226,7 @@ function App() {
           }
         break;
       }
-  }, [preference]);  
+  }, [preference, activeStep]);  
 
   // useEffect(() => {
   //     if (alert) {
@@ -192,44 +243,6 @@ function App() {
 
 
 
-  const alertContent = (a) => {
-
-    if (a) {
-      alertText =  <Alert severity="error">You must fill out the form.</Alert>;
-    } else {
-      alertText = <Alert severity="error" className='hidden'>empty</Alert>;
-    }
-
-    return alertText;
-  }
-
-  const regValidation = (type, value, target) => {
-    switch (type) {
-      case "email":
-        var emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
-        if (!emailRegex.test(value)) {
-          console.log("No");
-          console.log(target);
-          target.classList.add('my-class')
-          return false;
-        }else{
-          console.log("Yes");
-        }
-        break;
-      case "phone":
-         var phoneRegex = /^(\d{10}|\d{3}-\d{3}-\d{4}|\(\d{3}\)\s*\d{3}-\d{4})$/;
-        if (!phoneRegex.test(value)) {
-          console.log("No");
-          return false;
-        }else{
-          console.log("Yes");
-        }
-        break;
-    
-      default:
-        break;
-    }
-  }
 
 
   const stepContent = (step) => {     
@@ -241,8 +254,8 @@ function App() {
             <Typography variant='subtitle2'>Please provide your personal details so we can get to know you better</Typography>
             <Box className="inputStyle">
               <TextField className="inputWidth" required label="Full Name" value={info.name} variant="standard" onChange={(event)=>{setInfo({...info, name:event.target.value})}} />          
-              <TextField className="inputWidth" required label="Email Address" value={info.email} variant="standard" onChange={(event)=>{setInfo({...info, email:event.target.value}); regValidation("email",event.target.value, event.target);}}  />          
-              <TextField className="inputWidth" required label="Phone Number" value={info.phone} variant="standard" onChange={(event)=>{setInfo({...info, phone:event.target.value}); regValidation("phone",event.target.value)}} />          
+              <TextField className="inputWidth" required label="Email Address" value={info.email} variant="standard" onChange={(event)=>{setInfo({...info, email:event.target.value})}}  />          
+              <TextField className="inputWidth" required label="Phone Number" value={info.phone} variant="standard" onChange={(event)=>{setInfo({...info, phone:event.target.value})}} />          
               <TextField className="inputWidth" required label="Username" value={info.user} variant="standard" onChange={(event)=>{setInfo({...info, user:event.target.value})}} />          
             </Box>
         </Box>     
