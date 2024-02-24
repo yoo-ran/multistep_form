@@ -14,6 +14,8 @@ import Step from '@mui/material/Step';
 import StepLabel from '@mui/material/StepLabel';
 import Button from '@mui/material/Button';
 import Typography from '@mui/material/Typography';
+import { red,deepPurple} from '@mui/material/colors';
+
 
 import './App.css';
 
@@ -32,34 +34,34 @@ const theme = createTheme({
       fontWeight: 500,
       textAlign:"center",
       fontSize:"0.8rem",
-      color: "#7e57c2"
+      color: deepPurple[400]
     },
     subtitle2: {
       fontSize:"0.8rem",
     },
     button: {
       border: "1px solid",
-      color: "#7e57c2"
+      color: deepPurple[400]
     },
     h6:{
       color:"gray",
-      fontSize:"1rem",
+      fontSize:"0.7rem",
     },
     h5:{
       fontSize:"1.2rem"
     },
     body2:{
-      fontSize:"1.1rem"
+      fontSize:"1rem"
     },
     h3:{
       textAlign:'center',
       fontSize:"3rem",
       fontWeight:"bold",
-      color:"#7e57c2"
+      color:deepPurple[400]
     },
     body1:{
       textAlign:'center',
-      fontSize:"1rem"
+      fontSize:"0.9rem"
     },
     outlined:{
       fontSize:"0.8rem"
@@ -67,6 +69,70 @@ const theme = createTheme({
     standard:{
       fontSize:"0.5rem"
     }
+  },
+  components: {
+    MuiRadio: {
+      styleOverrides: {
+        root: {
+          '&.Mui-checked': {
+            color: deepPurple[400]
+          },
+        },
+      },
+    },
+    MuiInputLabel: {
+      styleOverrides: {
+        root: {
+          fontSize:"0.8rem",
+          '&.Mui-focused':{
+            color: deepPurple[400], // Change color to your desired color for label
+          }
+          // Add any other custom styles for the input label
+        },
+      },
+    },
+    MuiInput: {
+      styleOverrides: {
+        root:{
+          fontSize:"0.8rem",
+        },
+        underline: {
+          '&:after': {
+            borderBottomColor: deepPurple[400], // Change color to your desired color for border bottom
+          },
+        },
+      },
+    },
+    MuiStepLabel: {
+      styleOverrides: {
+        label: {
+          fontSize:"0.8rem",
+          // Add any other custom styles for the input label
+        }
+      },
+    },
+    MuiStepIcon: {
+      styleOverrides: {
+        root:{
+          '&.Mui-active':{
+            color: deepPurple[400], // Change color to your desired color for label
+          },
+          '&.Mui-completed':{
+            color: deepPurple[400], // Change color to your desired color for label
+          }
+        }
+      },
+    },
+    MuiAlert: {
+      styleOverrides: {
+        standardError: {
+          fontSize:"0.8rem",
+          backgroundColor: red[100], // Change background color to your desired color
+          color: '#000', // Change text color to your desired color
+          // Add any other custom styles for the standard error alert
+        },
+      },
+    },
   },
 });
 
@@ -100,7 +166,6 @@ function App() {
 
   const alertContent = (a) => {
     if (a) {
-      console.log(emailVali);
       if(emailVali){
         alertText =  <Alert severity="error">Email or phone number is invalid</Alert>;
       }else{
@@ -123,16 +188,12 @@ function App() {
       case 1:
         var emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
         var phoneRegex = /^(\d{10}|\d{3}-\d{3}-\d{4}|\(\d{3}\)\s*\d{3}-\d{4})$/;
-        console.log(info);
         if( Object.values(info).every(val => val !== "")){
-          console.log(33);
           if (emailRegex.test(info.email) && phoneRegex.test(info.phone) ) {
-            console.log("next");
             setGoNext(true);
             setAlert(false);
             setEmailVali(false);
           } else{
-            console.log("no");
             setEmailVali(true);
             setAlert(true);
           }
@@ -142,27 +203,6 @@ function App() {
           setEmailVali(false);
         }
        
-        // for (const [key, value] of Object.entries(info)) {
-        //   console.log(value);
-        //   if(value===""){
-        //     setGoNext(false);
-        //     setAlert(true);
-        //     setEmailVali(false);
-        //     console.log("sth empty");
-        //   }else{
-        //     console.log("?");
-        //     if (emailRegex.test(info.email) && phoneRegex.test(info.phone) ) {
-        //       console.log("next");
-        //       setGoNext(true);
-        //       setAlert(false);
-        //       setEmailVali(false);
-        //     } else{
-        //       console.log("no");
-        //       setEmailVali(true);
-        //       setAlert(true);
-        //     }
-        //   }
-        // }
         
       case 2:
         if (level!=="") {
@@ -183,11 +223,10 @@ function App() {
           }
         break;
 
-      // case 4:
-      //   if (preference!=="") {
-      //     setActiveStep((activeStep) => activeStep + 1);
-      //     }else{
-      //     }
+      case 4:
+        setActiveStep((activeStep) => activeStep + 2);
+         
+        break;
 
       default:
         setAlert(false);
@@ -228,22 +267,10 @@ function App() {
       }
   }, [preference, activeStep]);  
 
-  // useEffect(() => {
-  //     if (alert) {
-  //       alertText = <Alert severity="error" >You must fill out the form.</Alert>
-  //     } else {
-  //       alertText = "";
-  //     }
-  
-  // }, [alert]);  
 
   const handleBack = () => {
     setActiveStep((activeStep) => activeStep - 1);
   };
-
-
-
-
 
   const stepContent = (step) => {     
 
@@ -338,7 +365,7 @@ function App() {
 
       <Box className="boxStyle" spacing={8}>
         
-        {activeStep === steps.length + 1 ? (
+        {activeStep === steps.length+2 ? (
           // Compeleted
           <React.Fragment>
             <ThemeProvider theme={theme}>
@@ -388,7 +415,7 @@ function App() {
                       Back
                     </Button>
                     <Button onClick={handleNext} id='btn' variant='btn'>
-                      {activeStep === steps.length - 1 ? 'Finish' : 'Next'}
+                      {activeStep === steps.length ? 'Finish' : 'Next'}
                     </Button>
                 </Box>
               </Box>
