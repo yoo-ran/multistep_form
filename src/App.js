@@ -203,7 +203,8 @@ function App() {
           setEmailVali(false);
         }
        
-        
+        break; 
+
       case 2:
         if (level!=="") {
           setActiveStep((activeStep) => activeStep + 1);
@@ -245,8 +246,10 @@ function App() {
               setActiveStep((activeStep) => activeStep + 1);
               setAlert(false);
             }
+          break;
+        default: 
       }
-  }, [goNext]);
+  }, [goNext, null]);
 
   useEffect(() => {
       switch (activeStep) {
@@ -255,6 +258,7 @@ function App() {
             setAlert(false);
           }
         break;
+        default:
       }
   }, [level, activeStep]);  
 
