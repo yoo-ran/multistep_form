@@ -249,7 +249,7 @@ function App() {
           break;
         default: 
       }
-  }, [goNext, null]);
+  }, [goNext, activeStep]);
 
   useEffect(() => {
       switch (activeStep) {
@@ -269,6 +269,7 @@ function App() {
             setAlert(false);
           }
         break;
+        default:
       }
   }, [preference, activeStep]);  
 
