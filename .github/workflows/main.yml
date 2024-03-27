@@ -27,4 +27,4 @@ jobs:
         username: ftp-portfolio@yoorankim.com
         password: ${{ secrets.FTP_DEPLOY }}
         local-dir: build/
-        server-dir: mulistepform.yoorankim.com/
+        server-dir: multistepform.yoorankim.com/
