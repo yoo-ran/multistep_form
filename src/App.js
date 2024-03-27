@@ -214,6 +214,7 @@ function App() {
         break;
 
       case 3:
+      
         
         if (preference!=="") {
           setActiveStep((activeStep) => activeStep + 1);
